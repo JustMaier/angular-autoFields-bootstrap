@@ -1,13 +1,16 @@
 {
-	"name": "angular-autoFields-bootstrap",
-	"version": "0.5.0",
-	"repository":{
-		"type": "git",
-		"url": "git@github.com:JustMaier/angular-autoFields-bootstrap.git"
-	},
-	"main": "signalr-hub.min.js",
-	"dependencies": {
-		"angular": "*",
-		"angular-ui-bootstrap": "*",
-	}
+    "name": "angular-autoFields-bootstrap",
+    "version": "0.5.0",
+    "main": "autoFields-bootstrap.min.js",
+    "description": "Automatically generate fields from a schema object and bind them to an object",
+    "license": "GPLv2",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:JustMaier/angular-autoFields-bootstrap.git"
+    },
+    "dependencies": {
+        "angular": "*",
+        "angular-ui-bootstrap": "*"
+    },
+    "devDependencies": {}
 }
