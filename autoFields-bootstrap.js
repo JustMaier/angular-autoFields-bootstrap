@@ -9,16 +9,31 @@
 				var schemaStr = $attr.fields || $attr.autoFields,
 					optionsStr = $attr.options,
 					dataStr = $attr.data,
+					formStr = $attr.form || 'autoFields',
 					container = null;
 
 				var options = {
 					classes: {
 						formGroup: 'form-group',
 						input: 'form-control',
+						label: 'control-label',
 						col: 'col-sm-'
 					},
-					container: '<div class="autoFields" ng-form name="autoFields"></div>',
+					container: '<div class="autoFields" ng-form name="'+formStr+'"></div>',
 					defaultOption: 'Select One',
+					validation: {
+						enabled: true,
+						showMessages: true,
+						defaultMsgs: {
+							required: 'This field is required',
+							minlength: 'This is under minimum length',
+							maxlength: 'This exceeds maximum length',
+							min: 'This is under the minumum value',
+							max: 'This exceeds the maximum value',
+							email: 'This is not a valid email address',
+							valid: 'This field is valid'
+						}
+					},
 					dateSettings: {
 						showWeeks: false
 					},
@@ -29,12 +44,17 @@
 				if ($scope.tabIndex == null) $scope.tabIndex = 1;
 
 				var getField = function (field, index) {
-					var fieldEl = '<div class="' + options.classes.formGroup + ' ' + field.type + '">';
+					var fieldEl = '<div class="' + options.classes.formGroup + ' ' + field.type + '"';
+					if(options.validation.enabled){
+						fieldEl += ' ng-class="{\'has-error\':'+InvalidField(field)+', \'has-success\':'+ValidField(field)+'}"';
+					}
+					fieldEl += '>';
 					switch (field.type) {
 						case 'checkbox':
 							fieldEl += checkbox(field, index);
 							break;
 						case 'multiple':
+							fieldEl = '<div class="' + field.type + '">'
 							fieldEl += row(field, index);
 							break;
 						case 'date':
@@ -64,7 +84,7 @@
 				}
 
 				var label = function (field) {
-					return '<label for="' + field.property + '">' + labelText(field) + '</label>';
+					return '<label class="'+options.classes.label+'" for="' + field.property + '">' + labelText(field) + '</label>';
 				};
 
 				var row = function (field, index) {
@@ -84,7 +104,7 @@
 				}
 
 				var checkbox = function (field, index) {
-					var checkbox = '<label> <input type="checkbox"' + commonAttributes(field, index) + attributes(field.attr) + '/> ' + labelText(field) + '</label>';
+					var checkbox = '<label> <input type="checkbox"' + commonAttributes(field, index) + attributes(field, index) + '/> ' + labelText(field) + '</label>';
 					return checkbox;
 				}
 
@@ -103,7 +123,7 @@
 				var select = function (field, index) {
 					var select = '<select ng-options="' + field.list + '"';
 					select += commonAttributes(field, index);
-					if (field.attr != null) select += attributes(field.attr);
+					if (field.attr != null) select += attributes(field, index);
 					select += '>';
 					select += '<option value="">' + (field.defaultOption ? field.defaultOption : options.defaultOption) + '</option>';
 					select += '</select>';
@@ -113,7 +133,7 @@
 				var textarea = function (field, index) {
 					var textarea = '<textarea rows="' + (field.rows ? field.rows : options.textareaRows) + '"';
 					textarea += commonAttributes(field, index);
-					if (field.attr != null) textarea += attributes(field.attr);
+					if (field.attr != null) textarea += attributes(field, index);
 					textarea += '></textarea>';
 					return textarea;
 				};
@@ -121,24 +141,35 @@
 				var textInput = function (field, index) {
 					var input = '<input type="' + field.type + '"';
 					input += commonAttributes(field, index);
-					if (field.attr != null) input += attributes(field.attr);
+					if (field.attr != null) input += attributes(field, index);
 					if (field.type == 'url' && (field.fixUrl == true || options.fixUrl == true)) input += 'fix-url';
 					input += '></input>';
 					return input;
 				};
 
-				var attributes = function (attributes, index) {
+				var validation = function (field, index) {
+					var msg = [];
+					angular.forEach(angular.extend({}, options.validation.defaultMsgs, field.msgs), function(message, error){
+						if((field.msgs && field.msgs[error] != null) || (field.type == error) || (field.attr && (field.attr[error] != null || field.attr['ng'+CamelToTitle(error)] != null))) msg.push('('+formStr+'.'+field.property+'.$error.'+error+'? \''+message+'\' : \'\')');
+					});
+					var valid = (field.msgs && field.msgs.valid)? field.msgs.valid : options.validation.defaultMsgs.valid;
+					if(msg.length) var validation = ' popover-trigger="focus" popover="{{('+ValidField(field)+')? \''+valid+'\' : ('+msg.join('+')+')}}" popover-placement="top"';
+
+					return validation;
+				};
+
+				var attributes = function (field, index) {
 					var htmlAttr = [];
-					angular.forEach(attributes, function (value, name) {
+					angular.forEach(field.attr, function (value, name) {
 						var attr = CamelToDash(name) + '="' + value + '"';
 						htmlAttr.push(attr);
 					});
-					return htmlAttr.join(' ');
+					return htmlAttr.join(' ') + ((options.validation.enabled && options.validation.showMessages)? validation(field, index) : '');
 				};
 
 				var formScope = null
-				$scope.$watch(schemaStr, function (schema) {
-					//rebuild form
+				var build = function(schema){
+					schema = schema || $scope[schemaStr];
 					container.html('');
 					angular.forEach(schema, function (field, index) {
 						container.append(getField(field, index));
@@ -149,11 +180,18 @@
 					formScope.data = $scope[dataStr];
 					formScope.fields = schema;
 					$compile(container)(formScope);
+				}
+
+				$scope.$watch(optionsStr, function (newOptions, oldOptions) {
+					extendDeep(options, newOptions);
+					if(newOptions !== oldOptions) build();
 				}, true);
 
-				$scope.$watch(optionsStr, function (newOptions) {
-					angular.copy(options, newOptions);
+				$scope.$watch(schemaStr, function (schema) {
+					build(schema);
 				}, true);
+
+
 
 				container = angular.element(options.container)
 				$element.replaceWith(container);
@@ -167,6 +205,26 @@
 				var CamelToDash = function (str) {
 					return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 				}
+				var InvalidField = function(field){
+					return formStr+'.'+field.property+'.$invalid && '+formStr+'.'+field.property+'.$dirty';
+				}
+				var ValidField = function(field){
+					return formStr+'.'+field.property+'.$valid';
+				}
+				var extendDeep = function(dst) { //Remove once this is added to Angular https://github.com/angular/angular.js/pull/5059
+					angular.forEach(arguments, function(obj) {
+						if (obj !== dst) {
+							angular.forEach(obj, function(value, key) {
+								if (dst[key] && dst[key].constructor && dst[key].constructor === Object) {
+									extendDeep(dst[key], value);
+								} else {
+									dst[key] = value;
+								}     
+							});   
+						}
+					});
+					return dst;
+				};
 			}
 		}
 	}

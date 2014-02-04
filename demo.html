@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en" ng-app="app" ng-controller="demoCtrl">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>Angular AutoField Bootstrap</title>
+	<link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+	<!-- Rainbow JS for syntax highlighting -->
+	<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/rainbow/1.2.0/themes/github.css">
+	<style type="text/css">
+		.bs-masthead,.bs-header {
+			position: relative;
+			padding: 30px 15px;
+			color: #fff;
+			text-align: center;
+			text-shadow: 0 1px 0 rgba(0,0,0,.1);
+			background-color: #45a0de;
+			background-image: -webkit-linear-gradient(top,#2891d9 0,#45a0de 100%);
+			background-image: linear-gradient(to bottom,#2891d9 0,#45a0de 100%);
+			background-repeat: repeat-x;
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2891d9', endColorstr='#45a0de', GradientType=0)
+		}
+		.bs-masthead .bs-booticon {
+			margin: 0 auto 30px
+		}
+
+		.bs-masthead h1 {
+			font-weight: 300;
+			line-height: 1;
+			color: #fff
+		}
+
+		.bs-masthead .lead {
+			margin: 0 auto 30px;
+			font-size: 20px;
+			color: #fff
+		}
+
+		.bs-masthead .btn {
+			width: 100%;
+			padding: 15px 30px;
+			font-size: 20px
+		}
+
+		@media (min-width:480px) {
+			.bs-masthead .btn {
+				width: auto
+			}
+		}
+
+		@media (min-width:768px) {
+			.bs-masthead {
+				padding-top: 80px;
+				padding-bottom: 80px;
+				text-align: left;
+			}
+
+			.bs-masthead .lead{
+				margin:0 0 30px;
+			}
+
+			.bs-masthead h1 {
+				font-size: 60px
+			}
+
+			.bs-masthead .lead {
+				font-size: 24px
+			}
+		}
+
+		@media (min-width:992px) {
+			.bs-masthead .lead {
+				width: 80%;
+				font-size: 30px
+			}
+		}
+
+		.btn-outline-inverse {
+			color: #fff;
+			background-color: transparent;
+			border-color: #fff
+		}
+
+		.btn-outline-inverse:hover,.btn-outline-inverse:focus,.btn-outline-inverse:active {
+			color: #45a0de;
+			text-shadow: none;
+			background-color: #fff;
+			border-color: #fff
+		}
+
+		.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+			background-color: #f8f8f8;
+			border: 1px solid #ccc;
+			border-bottom-color: transparent;
+		}
+
+		.tab-pane>pre{
+			border-top: 0;
+			border-radius:0 0 3px 3px;
+		}
+
+		.tag.close{
+			float: none;
+			font-size: 13px;
+			font-weight: normal;
+			color: navy;
+			text-shadow: none;
+			opacity: 1;
+			cursor: text;
+		}
+		.bs-social-buttons li{
+		}
+	</style>
+</head>
+<body>
+	<div class="bs-masthead" role="main">
+		<div class="container">
+			<h1>Bootstrap AutoFields</h1>
+			<p class="lead">Automatically generate fields from a schema object and bind them to an object</p>
+			<p class="lead">
+				<a href="https://github.com/JustMaier/angular-autoFields-bootstrap" class="btn btn-outline-inverse btn-lg">Code on Github</a>
+			</p>
+			<ul class="bs-social-buttons list-inline">
+				<li>
+					<iframe src="http://ghbtns.com/github-btn.html?user=JustMaier&repo=angular-autoFields-bootstrap&type=watch&count=true"
+							allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+				</li>
+				<li>
+					<iframe src="http://ghbtns.com/github-btn.html?user=JustMaier&repo=angular-autoFields-bootstrap&type=fork&count=true"
+							allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
+				</li>
+				<li>
+					<a href="https://twitter.com/share" class="twitter-share-button"
+					   data-hashtags="angularjs">Tweet</a>
+					<script>!function (d, s, id) {
+						var js, fjs = d.getElementsByTagName(s)[0];
+						if (!d.getElementById(id)) {
+							js = d.createElement(s);
+							js.id = id;
+							js.src = "http://platform.twitter.com/widgets.js";
+							fjs.parentNode.insertBefore(js, fjs);
+						}
+					}(document, "script", "twitter-wjs");</script>
+				</li>
+				<li>
+					<!-- Place this tag where you want the +1 button to render. -->
+					<div class="g-plusone" data-size="medium"></div>
+
+					<!-- Place this tag after the last +1 button tag. -->
+					<script type="text/javascript">
+						(function () {
+							var po = document.createElement('script');
+							po.type = 'text/javascript';
+							po.async = true;
+							po.src = 'https://apis.google.com/js/plusone.js';
+							var s = document.getElementsByTagName('script')[0];
+							s.parentNode.insertBefore(po, s);
+						})();
+					</script>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<section id="body">
+		<div class="container">
+			<section id="installation">
+				<div class="page-header">
+					<h1>Installation</h1>
+				</div>
+				<h3>Bower</h3>
+				<pre>bower install angular-autoFields-bootstrap</pre>
+				<h3>Nuget</h3>
+				<pre>install-package AngularJs.AutoFields.Bootstrap</pre>
+				<h3>Manually</h3>
+				<pre>&lt;script type=&quot;text/javascript&quot; src=&quot;js/autoFields-bootstrap.js&quot;&gt;&lt;/script&gt;</pre>
+			</section>
+			<section id="usage">
+				<div class="page-header">
+					<h1>Usage</h1>
+				</div>
+				<ol>
+					<li>If you're doing this manually, be sure to install Angular-UI Bootstrap for date popover support</li>
+					<li>Include the <code>autoFields-bootstrap.js</code> script provided by this component into your app</li>
+					<li>Add <code>autoFields</code> as a module dependency to your app</li>
+				</ol>
+			</section>
+
+			<section id="demo">
+				<div class="page-header">
+					<h1>Demo</h1>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-6">
+						<form name="joinForm" ng-submit="join()">
+							<auto:fields fields="schema" data="user" options="options"></auto:fields>
+							<button type="submit" class="btn btn-default btn-lg btn-block" ng-class="{'btn-primary':joinForm.$valid}" tabindex="100">Join</button>
+						</form>
+					</div>
+					<div class="col-sm-6">
+						<h4>Bound Data</h4>
+						<pre ng-bind="user | json"></pre>
+						<h4>Demo Functions</h4>
+						<button class="btn btn-default" ng-click="addField()">Add Field</button>
+						<button class="btn btn-default" ng-click="toggleValidation()">Toggle Validation</button>
+					</div>
+				</div>				
+
+				<hr>
+
+				<h3>Code</h3>
+
+				<tabset>
+					<tab heading="Markup">
+						<pre>
+							<code class="ng-non-bindable" data-language="html">
+&lt;div class=&quot;col-sm-6&quot;&gt;
+	&lt;form name=&quot;joinForm&quot; ng-submit=&quot;join()&quot;&gt;
+		&lt;auto:fields fields=&quot;schema&quot; data=&quot;user&quot; options=&quot;options&quot;&gt;&lt;/auto:fields&gt;
+		&lt;button type=&quot;submit&quot; class=&quot;btn btn-default btn-lg btn-block&quot; ng-class=&quot;{'btn-primary':joinForm.$valid}&quot; tabindex=&quot;100&quot;&gt;Join&lt;/button&gt;
+	&lt;/form&gt;
+&lt;/div&gt;
+&lt;div class=&quot;col-sm-6&quot;&gt;
+	&lt;h4&gt;Bound Data&lt;/h4&gt;
+	&lt;pre ng-bind=&quot;user | json&quot;&gt;&lt;/pre&gt;
+	&lt;h4&gt;Demo Functions&lt;/h4&gt;
+	&lt;button class=&quot;btn btn-default&quot; ng-click=&quot;addField()&quot;&gt;Add Field&lt;/button&gt;
+	&lt;button class=&quot;btn btn-default&quot; ng-click=&quot;toggleValidation()&quot;&gt;Toggle Validation&lt;/button&gt;
+&lt;/div&gt;
+							</code>
+						</pre>
+					</tab>
+					<tab heading="Javascript">
+						<pre>
+							<code data-language="javascript">
+angular.module('app',['autoFields'])
+.controller('demoCtrl', ['$scope','$log', function ($scope, $log) {
+	$scope.genders = {
+		0: 'Male',
+		1: 'Female'
+	};
+
+	$scope.user = {
+		username: '',
+		email: '',
+		gender: null,
+		bio: '',
+		birthdate: new Date(),
+		password: '',
+		confirmPassword: '',
+		rememberMe: false
+	};
+
+	$scope.options = {
+		validation: {
+			enabled: true
+		}
+	};
+
+	$scope.schema = [
+		{ property: 'username', type: 'text', attr: { ngMinlength: 4, required: true }, msgs: {minlength: 'Needs to have at least 4 characters'} },
+		{ property: 'email', type: 'email', attr: { required: true }, msgs: {required: 'You need an email address', email:'Email address needs to be valid', valid: 'Nice email address!'} },
+		{ property: 'birthdate', type: 'date', attr: { required: true } },
+		{ property: 'gender', type: 'select', list: 'key as value for (key,value) in genders', attr: {required: true}},
+		{ property: 'bio', type: 'textarea', rows: 5, placeholder: 'A bit about yourself...'},
+		{ type:'multiple', fields: [
+			{ property: 'password', type: 'password', attr: { required: true, ngMinlength:6 } },
+			{ property: 'confirmPassword', label: 'Confirm Password', type: 'password', attr: { confirmPassword: 'user.password', required: true, ngMinlength:6 } }
+		], columns: 6},
+		{ property: 'rememberMe', label: 'Stay signed in', type: 'checkbox' }
+	];
+
+	$scope.toggleValidation = function(){
+		$scope.options.validation.enabled = !$scope.options.validation.enabled;
+	};
+
+	$scope.addField = function(){
+		$scope.schema.push({property: 'new'+(new Date().getTime()), label: 'New Field'});
+	};
+
+	$scope.join = function(){
+		if(!$scope.joinForm.$valid) return;
+		//join stuff....
+		$log.info($scope.user);
+		alert('You\'ve joined!\n\nSee console for additional info.');
+	}
+}]);
+							</code>
+						</pre>
+					</tab>
+				</tabset>
+			</section>
+
+			<section id="schema">
+				<div class="page-header">
+					<h1>Field Schema</h1>
+				</div>
+				<ul>
+					<li><code>property</code> the data property to bind to</li>
+					<li><code>type</code> the type of field. Options include: checkbox, date, select, textarea, any text variation (ie. password, text, email, number)</li>
+					<li><code>label</code> the label for the field. If no label is provided it will convert the property name to title case. If you don't want a label, set it's value to ''</li>
+					<li><code>attr</code> any additional attributes you would like to have on the object. Camelcase is converted to dash notation. Validation properties can go here.</li>
+					<li><code>list</code> the string that goes into ng-options for select fields</li>
+					<li><code>rows</code> number of textarea rows (defaults to 3)</li>
+					<li><code>columns</code> number of sm columns a field should span if the type is multiple. If this is applied at the same level as the multiple type, it will apply it to all of it's fields.</li>
+					<li><code>msgs</code> validation messages for corresponding validation properties on the field</li>
+				</ul>
+			</section>
+
+			<section id="options">
+				<div class="page-header">
+					<h1>Options</h1>
+				</div>
+				<ul>
+					<li><code>classes</code> the classes for the different elements</li>
+					<li><code>container</code> the html for the div the will hold the fields</li>
+					<li><code>defaultOption</code> the text for the default select option (Select One)</li>
+					<li><code>dateSettings</code> settings for the date fields (<a href="http://angular-ui.github.io/bootstrap/#/datepicker" target="_blank">see angular-ui-bootstrap's date picker</a>)</li>
+					<li><code>textareaRows</code> the default amount of rows for a textarea (3)</li>
+					<li><code>fixUrl</code> whether or not url type fields should have http:// auto added (true)</li>
+					<li><code>validation</code> settings for validation
+						<ul>
+							<li><code>enabled</code> enabled/disable validation (enabled by default)</li>
+							<li><code>showMessages</code> enabled/disable validation messages (enabled by default)</li>
+							<li><code>defaultMsgs</code> default validation messages when none is specified in the field schema</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+
+			<section id="notes">
+				<div class="page-header">
+					<h1>Notes</h1>
+				</div>
+				<ul>
+					<li>It shares the scope of it's parent so that it can access the data on the scope</li>
+					<li>If you would like to add another type of field or you run into any bugs, please submit a pull request!</li>
+				</ul>
+			</section>
+		</div>
+	</section>
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js"></script>
+	<script type="text/javascript" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.10.0.js"></script>
+	<script type="text/javascript" src="autoFields-bootstrap.js"></script>
+	<script type="text/javascript">
+		angular.module('app',['autoFields'])
+		.controller('demoCtrl', ['$scope','$log', function ($scope, $log) {
+			$scope.genders = {
+				0: 'Male',
+				1: 'Female'
+			};
+
+			$scope.user = {
+				username: '',
+				email: '',
+				gender: null,
+				bio: '',
+				birthdate: new Date(),
+				password: '',
+				confirmPassword: '',
+				rememberMe: false
+			};
+
+			$scope.options = {
+				validation: {
+					enabled: true
+				}
+			};
+
+			$scope.schema = [
+				{ property: 'username', type: 'text', attr: { ngMinlength: 4, required: true }, msgs: {minlength: 'Needs to have at least 4 characters'} },
+				{ property: 'email', type: 'email', attr: { required: true }, msgs: {required: 'You need an email address', email:'Email address needs to be valid', valid: 'Nice email address!'} },
+				{ property: 'birthdate', type: 'date', attr: { required: true } },
+				{ property: 'gender', type: 'select', list: 'key as value for (key,value) in genders', attr: {required: true}},
+				{ property: 'bio', type: 'textarea', rows: 5, placeholder: 'A bit about yourself...'},
+				{ type:'multiple', fields: [
+					{ property: 'password', type: 'password', attr: { required: true, ngMinlength:6 } },
+					{ property: 'confirmPassword', label: 'Confirm Password', type: 'password', attr: { confirmPassword: 'user.password', required: true, ngMinlength:6 } }
+				], columns: 6},
+				{ property: 'rememberMe', label: 'Stay signed in', type: 'checkbox' }
+			];
+
+			$scope.toggleValidation = function(){
+				$scope.options.validation.enabled = !$scope.options.validation.enabled;
+			};
+
+			$scope.addField = function(){
+				$scope.schema.push({property: 'new'+(new Date().getTime()), label: 'New Field'});
+			};
+
+			$scope.join = function(){
+				if(!$scope.joinForm.$valid) return;
+				//join stuff....
+				$log.info($scope.user);
+				alert('You\'ve joined!\n\nSee console for additional info.');
+			}
+		}]);
+	</script>
+	<!-- Rainbow JS for syntax highlighting -->
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/rainbow/1.2.0/js/rainbow.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/rainbow/1.2.0/js/language/generic.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/rainbow/1.2.0/js/language/html.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/rainbow/1.2.0/js/language/javascript.js"></script>
+</body>
+</html>

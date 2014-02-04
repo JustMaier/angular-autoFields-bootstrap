@@ -3,6 +3,8 @@ angular-autoFields-bootstrap
 
 Automatically generate fields from a schema object and bind them to an object
 
+[**Check out a demo!**](http://justmaier.github.io/angular-autoFields-bootstrap)
+
 ##Installation
 
 ####Bower
@@ -31,7 +33,7 @@ angular.module('app',['autoFields'])
 	};
 
 	$scope.schema = [
-		{ property: 'username', type: 'text', attr: { ngMinlength: 4, required: true } },
+		{ property: 'username', type: 'text', attr: { ngMinlength: 4, required: true }, msgs: {minlength: 'Needs to have at least 4 characters'} },
 		{ property: 'password', type: 'password', attr: { required: true } },
 		{ property: 'confirmPassword', label: 'Confirm Password', type: 'password', attr: { confirmPassword: 'user.password', required: true } }
 	];
@@ -60,6 +62,7 @@ angular.module('app',['autoFields'])
 * `list` the string that goes into ng-options for select fields
 * `rows` number of textarea rows (defaults to 3)
 * `columns` number of sm columns a field should span if the type is multiple. If this is applied at the same level as the multiple type, it will apply it to all of it's fields.
+* `msgs` validation messages for corresponding validation properties on the field
 
 ##Options
 
@@ -69,6 +72,10 @@ angular.module('app',['autoFields'])
 * `dateSettings` settings for the date fields ([see angular-ui-bootstrap's date picker](http://angular-ui.github.io/bootstrap/#/datepicker))
 * `textareaRows` the default amount of rows for a textarea (3)
 * `fixUrl` whether or not url type fields should have http:// auto added (true)
+* `validation` settings for validation
+	* `enabled` enabled/disable validation (enabled by default)
+	* `showMessages` enabled/disable validation messages (enabled by default)
+	* `defaultMsgs` default validation messages when none is specified in the field schema
 
 ##Notes
 * It shares the scope of it's parent so that it can access the data on the scope
