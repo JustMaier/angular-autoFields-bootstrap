@@ -1,9 +1,10 @@
 angular-autoFields-bootstrap
 =============================
 
-Automatically generate fields from a schema object and bind them to an object
+Avoid bloating your templates with repetitive form html.  
+Instead, just specify a schema for the form and the model you want to bind it to and you're done!
 
-[**Check out a demo!**](http://justmaier.github.io/angular-autoFields-bootstrap)
+[**Check out a demo!**](http://justmaier.github.io/angular-autoFields-bootstrap/#demo)
 
 ##Installation
 
