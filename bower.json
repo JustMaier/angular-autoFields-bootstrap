@@ -3,7 +3,7 @@
     "version": "0.6.0",
     "main": "autoFields-bootstrap.min.js",
     "description": "Automatically generate fields from a schema object and bind them to an object",
-    "license": "GPLv2",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "git@github.com:JustMaier/angular-autoFields-bootstrap.git"
