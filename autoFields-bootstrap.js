@@ -114,8 +114,10 @@
 
 				var commonAttributes = function (field, index) {
 					var attr = ' id="' + field.property + '" tabindex="' + $scope.tabIndex + '" name="' + field.property + '" ng-model="' + (field.value ? 'autoForm' + schemaStr.replace(/(\[|\])/g, "_") + index + '.model' : dataStr + "['" + field.property + "']") + '" placeholder="' + (field.placeholder ? field.placeholder : labelText(field)) + '" ';
+
 					if (field.value != null) attr += 'value-function="' + schemaStr + '[' + index + '].value"';
 					if (field.type != 'checkbox') attr += 'class="' + options.classes.input + ' ' + field.type + '" ';
+					if(options.validation.enabled && options.validation.showMessages) attr += validation(field, index);
 					$scope.tabIndex++;
 					return attr;
 				}
@@ -164,7 +166,7 @@
 						var attr = CamelToDash(name) + '="' + value + '"';
 						htmlAttr.push(attr);
 					});
-					return htmlAttr.join(' ') + ((options.validation.enabled && options.validation.showMessages)? validation(field, index) : '');
+					return htmlAttr.join(' ');
 				};
 
 				var formScope = null
