@@ -59,6 +59,7 @@ angular.module('app',['autoFields'])
 * `property` the data property to bind to
 * `type` the type of field. Options include: checkbox, date, select, textarea, any text variation (ie. password, text, email, number)
 * `label` the label for the field. If no label is provided it will convert the property name to title case. If you don't want a label, set it's value to ''
+* `help` a block of help or description text to be displayed beneath the field
 * `attr` any additional attributes you would like to have on the object. Camelcase is converted to dash notation. Validation properties can go here.
 * `list` the string that goes into ng-options for select fields
 * `rows` number of textarea rows (defaults to 3)

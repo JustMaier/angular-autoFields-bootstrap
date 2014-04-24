@@ -74,6 +74,7 @@
 							fieldEl += textInput(field, index);
 							break;
 					}
+					if(field.help) fieldEl += help(field);
 					fieldEl += '</div>';
 
 					return fieldEl;
@@ -85,6 +86,10 @@
 
 				var label = function (field) {
 					return '<label class="'+options.classes.label+'" for="' + field.property + '">' + labelText(field) + '</label>';
+				};
+
+				var help = function(field){
+					return '<p class="help-block">'+field.help+'</p>';
 				};
 
 				var row = function (field, index) {
