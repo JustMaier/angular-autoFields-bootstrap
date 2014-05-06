@@ -69,6 +69,22 @@
 							fieldEl += label(field);
 							fieldEl += textarea(field, index);
 							break;
+            case 'static':
+              fieldEl += label(field);
+              fieldEl += staticInput(field, index);
+              break;
+            case 'array':
+              fieldEl += label(field);
+              fieldEl += array(field, index)
+              break;
+            case 'template':
+              if (field.templateUrl != null) {
+                fieldEl += '<div ng-include="' + field.templateUrl + '"></div>';
+                break
+              } else if (field.template != null) {
+                fieldEl += field.template;
+                break
+              }
 						default:
 							fieldEl += label(field);
 							fieldEl += textInput(field, index);
@@ -118,10 +134,11 @@
 				}
 
 				var commonAttributes = function (field, index) {
-					var attr = ' id="' + field.property + '" tabindex="' + $scope.tabIndex + '" name="' + field.property + '" ng-model="' + (field.value ? 'autoForm' + schemaStr.replace(/(\[|\])/g, "_") + index + '.model' : dataStr + "['" + field.property + "']") + '" placeholder="' + (field.placeholder ? field.placeholder : labelText(field)) + '" ';
+					var attr = ' id="' + field.property + '" tabindex="' + $scope.tabIndex + '" name="' + field.property + '" ng-model="' + (field.expr ? field.expr : (field.value ? 'autoForm' + schemaStr.replace(/(\[|\])/g, "_") + index + '.model' : dataStr + "['" + field.property + "']")) + '" placeholder="' + (field.placeholder ? field.placeholder : labelText(field)) + '" ';
 
 					if (field.value != null) attr += 'value-function="' + schemaStr + '[' + index + '].value"';
 					if (field.type != 'checkbox') attr += 'class="' + options.classes.input + ' ' + field.type + '" ';
+          if (field.type == 'static') attr += '" ng-bind="' + (field.value ? 'autoForm' + schemaStr.replace(/(\[|\])/g, "_") + index + '.model' : dataStr + "['" + field.property + "']") + '" ';
 					if(options.validation.enabled && options.validation.showMessages) attr += validation(field, index);
 					$scope.tabIndex++;
 					return attr;
@@ -145,6 +162,13 @@
 					return textarea;
 				};
 
+        var staticInput = function (field, index) {
+          var staticInput = '<p class="form-control-static"';
+          staticInput += commonAttributes(field, index);
+          staticInput += '></p>';
+          return staticInput;
+        };
+
 				var textInput = function (field, index) {
 					var input = '<input type="' + field.type + '"';
 					input += commonAttributes(field, index);
@@ -154,15 +178,23 @@
 					return input;
 				};
 
+        var array = function (field, index) {
+          var v = '<div ng-repeat="' + field.repeat + '">';
+          v += label(field.proto);
+          v += getField(field.proto, index);
+          v += '</div>';
+          return v;
+        };
+
 				var validation = function (field, index) {
-					var msg = [];
+					var msg = [], valiation = '';
 					angular.forEach(angular.extend({}, options.validation.defaultMsgs, field.msgs), function(message, error){
 						if((field.msgs && field.msgs[error] != null) || (field.type == error) || (field.attr && (field.attr[error] != null || field.attr['ng'+CamelToTitle(error)] != null))) msg.push('('+formStr+'.'+field.property+'.$error.'+error+'? \''+message+'\' : \'\')');
 					});
 					var valid = (field.msgs && field.msgs.valid)? field.msgs.valid : options.validation.defaultMsgs.valid;
 					if(msg.length) var validation = ' popover-trigger="focus" popover="{{('+ValidField(field)+')? \''+valid+'\' : ('+msg.join('+')+')}}" popover-placement="top"';
 
-					return validation;
+					return validation || '';
 				};
 
 				var attributes = function (field, index) {
