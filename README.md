@@ -4,9 +4,9 @@ angular-autofields-bootstrap
 Avoid bloating your templates with repetitive form html.  
 Instead, just specify a schema for the form and the model you want to bind it to and you're done!
 
-**NEW!** This project has just been completely revamped to be [more modular](http://justmaier.github.io/angular-autofields-bootstrap/#extend). You can now use AutoFields without bootstrap!
+**NEW!** This project has just been completely revamped to be [more modular](http://justmaier.github.io/angular-autoFields-bootstrap/#extend). You can now use AutoFields without bootstrap!
 
-[**Check out a demo & documentation**](http://justmaier.github.io/angular-autofields-bootstrap/#demo)
+[**Check out a demo & documentation**](http://justmaier.github.io/angular-autoFields-bootstrap/#demo)
 
 ##Installation
 
