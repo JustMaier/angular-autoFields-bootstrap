@@ -1,298 +1,198 @@
-﻿angular.module('autoFields', ['ui.bootstrap'])
-.directive('autoFields', ['$compile', function ($compile, $rootScope) {
-	return {
-		restrict: 'E',
-		priority: 1,
-		replace: true,
-		compile: function () {
-			return function ($scope, $element, $attr) {
-				var schemaStr = $attr.fields || $attr.autoFields,
-					optionsStr = $attr.options,
-					dataStr = $attr.data,
-					formStr = $attr.form || 'autoFields',
-					container = null;
+/**
+ * @license Autofields v2.0.0
+ * (c) 2014 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
+ * License: MIT
+ */
+'use strict';
 
-				var options = {
-					classes: {
-						formGroup: 'form-group',
-						input: 'form-control',
-						label: 'control-label',
-						col: 'col-sm-'
-					},
-					container: '<div class="autoFields" ng-form name="'+formStr+'"></div>',
-					defaultOption: 'Select One',
-					validation: {
-						enabled: true,
-						showMessages: true,
-						defaultMsgs: {
-							required: 'This field is required',
-							minlength: 'This is under minimum length',
-							maxlength: 'This exceeds maximum length',
-							min: 'This is under the minumum value',
-							max: 'This exceeds the maximum value',
-							email: 'This is not a valid email address',
-							valid: 'This field is valid'
-						}
-					},
-					dateSettings: {
-						showWeeks: false
-					},
-					textareaRows: 3,
-					fixUrl: true
-				};
-				$scope.dateSettings = options.dateSettings;
-				if ($scope.tabIndex == null) $scope.tabIndex = 1;
+/**
+ * @ngdoc overview
+ * @name autofields.bootstrap
+ * Adds bootstrap classes and support for bootstrap fields
+ */
+angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
+	.config(['$autofieldsProvider', function($autofieldsProvider){
+		// Add Bootstrap classes
+		$autofieldsProvider.settings.classes.container.push('form-group');
+		$autofieldsProvider.settings.classes.input.push('form-control');
+		$autofieldsProvider.settings.classes.label.push('control-label');
+		
+		// Override Checkbox Field Handler
+		$autofieldsProvider.registerHandler('checkbox', function(directive, field, index){
+			var fieldElements = $autofieldsProvider.field(directive, field, '<input/>');
 
-				var getField = function (field, index) {
-					var fieldEl = '<div class="' + options.classes.formGroup + ' ' + field.type + '"';
-					if(options.validation.enabled){
-						fieldEl += ' ng-class="{\'has-error\':'+InvalidField(field)+', \'has-success\':'+ValidField(field)+'}"';
-					}
-					fieldEl += '>';
-					switch (field.type) {
-						case 'checkbox':
-							fieldEl += checkbox(field, index);
-							break;
-						case 'multiple':
-							fieldEl = '<div class="' + field.type + '">'
-							fieldEl += row(field, index);
-							break;
-						case 'date':
-							fieldEl += label(field);
-							fieldEl += date(field, index);
-							break;
-						case 'select':
-							fieldEl += label(field);
-							fieldEl += select(field, index);
-							break;
-						case 'textarea':
-							fieldEl += label(field);
-							fieldEl += textarea(field, index);
-							break;
-						default:
-							fieldEl += label(field);
-							fieldEl += textInput(field, index);
-							break;
-					}
-					if(field.help) fieldEl += help(field);
-					fieldEl += '</div>';
+			if(fieldElements.label) fieldElements.label.prepend(fieldElements.input);
+			fieldElements.input.removeClass('form-control');
 
-					return fieldEl;
-				};
+			return fieldElements.fieldContainer;
+		});
 
-				var labelText = function (field) {
-					return (field.label || CamelToTitle(field.property));
-				}
+		// Date Handler with Bootstrap Popover
+		$autofieldsProvider.settings.dateSettings = {
+			showWeeks:false,
+			datepickerPopup: 'MMMM dd, yyyy'
+		};
+		$autofieldsProvider.registerHandler('date', function(directive, field, index){
+			var showWeeks = field.showWeeks ? field.showWeeks : directive.options.dateSettings.showWeeks;
+			var datepickerPopup = field.datepickerPopup ? field.datepickerPopup : directive.options.dateSettings.datepickerPopup;
 
-				var label = function (field) {
-					return '<label class="'+options.classes.label+'" for="' + field.property + '">' + labelText(field) + '</label>';
-				};
-
-				var help = function(field){
-					return '<p class="help-block">'+field.help+'</p>';
-				};
-
-				var row = function (field, index) {
-					var row = '<div class="row">';
-					var cells = [];
-					var normalSchemaStr = angular.copy(schemaStr);
-					schemaStr += '[' + index + '].fields';
-					angular.forEach(field.fields, function (cell, cellIndex) {
-						var cellHtml = '<div class="' + options.classes.col + (cell.columns || field.columns) + '">';
-						cellHtml += getField(cell, cellIndex)
-						cellHtml += '</div>';
-						cells.push(cellHtml);
-					});
-					schemaStr = normalSchemaStr;
-					row += cells.join(' ') + '</div>';
-					return row;
-				}
-
-				var checkbox = function (field, index) {
-					var checkbox = '<label> <input type="checkbox"' + commonAttributes(field, index) + attributes(field, index) + '/> ' + labelText(field) + '</label>';
-					return checkbox;
-				}
-
-				var date = function (field, index) {
-					return '<input type="text" show-weeks="dateSettings.showWeeks" datepicker-popup="MMMM dd, yyyy"' + commonAttributes(field, index) + attributes(field, index) + ' />';
-				}
-
-				var commonAttributes = function (field, index) {
-					var attr = ' id="' + field.property + '" tabindex="' + $scope.tabIndex + '" name="' + field.property + '" ng-model="' + (field.value ? 'autoForm' + schemaStr.replace(/(\[|\])/g, "_") + index + '.model' : dataStr + "['" + field.property + "']") + '" placeholder="' + (field.placeholder ? field.placeholder : labelText(field)) + '" ';
-
-					if (field.value != null) attr += 'value-function="' + schemaStr + '[' + index + '].value"';
-					if (field.type != 'checkbox') attr += 'class="' + options.classes.input + ' ' + field.type + '" ';
-					if(options.validation.enabled && options.validation.showMessages) attr += validation(field, index);
-					$scope.tabIndex++;
-					return attr;
-				}
-
-				var select = function (field, index) {
-					var select = '<select ng-options="' + field.list + '"';
-					select += commonAttributes(field, index);
-					if (field.attr != null) select += attributes(field, index);
-					select += '>';
-					select += '<option value="">' + (field.defaultOption ? field.defaultOption : options.defaultOption) + '</option>';
-					select += '</select>';
-					return select;
-				}
-
-				var textarea = function (field, index) {
-					var textarea = '<textarea rows="' + (field.rows ? field.rows : options.textareaRows) + '"';
-					textarea += commonAttributes(field, index);
-					if (field.attr != null) textarea += attributes(field, index);
-					textarea += '></textarea>';
-					return textarea;
-				};
-
-				var textInput = function (field, index) {
-					var input = '<input type="' + field.type + '"';
-					input += commonAttributes(field, index);
-					if (field.attr != null) input += attributes(field, index);
-					if (field.type == 'url' && (field.fixUrl == true || options.fixUrl == true)) input += 'fix-url';
-					input += '></input>';
-					return input;
-				};
-
-				var validation = function (field, index) {
-					var msg = [];
-					angular.forEach(angular.extend({}, options.validation.defaultMsgs, field.msgs), function(message, error){
-						if((field.msgs && field.msgs[error] != null) || (field.type == error) || (field.attr && (field.attr[error] != null || field.attr['ng'+CamelToTitle(error)] != null))) msg.push('('+formStr+'.'+field.property+'.$error.'+error+'? \''+message+'\' : \'\')');
-					});
-					var valid = (field.msgs && field.msgs.valid)? field.msgs.valid : options.validation.defaultMsgs.valid;
-					if(msg.length) var validation = ' popover-trigger="focus" popover="{{('+ValidField(field)+')? \''+valid+'\' : ('+msg.join('+')+')}}" popover-placement="top"';
-
-					return validation;
-				};
-
-				var attributes = function (field, index) {
-					var htmlAttr = [];
-					angular.forEach(field.attr, function (value, name) {
-						var attr = CamelToDash(name) + '="' + value + '"';
-						htmlAttr.push(attr);
-					});
-					return htmlAttr.join(' ');
-				};
-
-				var formScope = null
-				var build = function(schema){
-					schema = schema || $scope[schemaStr];
-					container.html('');
-					angular.forEach(schema, function (field, index) {
-						container.append(getField(field, index));
-					});
-
-					if (formScope != null) formScope.$destroy();
-					formScope = $scope.$new();
-					formScope.data = $scope[dataStr];
-					formScope.fields = schema;
-					$compile(container)(formScope);
-				}
-
-				$scope.$watch(optionsStr, function (newOptions, oldOptions) {
-					extendDeep(options, newOptions);
-					if(newOptions !== oldOptions) build();
-				}, true);
-
-				$scope.$watch(schemaStr, function (schema) {
-					build(schema);
-				}, true);
-
-
-
-				container = angular.element(options.container)
-				$element.replaceWith(container);
-
-				//Helper Functions
-				var CamelToTitle = function (str) {
-					return str
-					.replace(/([A-Z])/g, ' $1')
-					.replace(/^./, function (str) { return str.toUpperCase(); });
-				};
-				var CamelToDash = function (str) {
-					return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-				}
-				var InvalidField = function(field){
-					return formStr+'.'+field.property+'.$invalid && '+formStr+'.'+field.property+'.$dirty';
-				}
-				var ValidField = function(field){
-					return formStr+'.'+field.property+'.$valid';
-				}
-				var extendDeep = function(dst) { //Remove once this is added to Angular https://github.com/angular/angular.js/pull/5059
-					angular.forEach(arguments, function(obj) {
-						if (obj !== dst) {
-							angular.forEach(obj, function(value, key) {
-								if (dst[key] && dst[key].constructor && dst[key].constructor === Object) {
-									extendDeep(dst[key], value);
-								} else {
-									dst[key] = value;
-								}     
-							});   
-						}
-					});
-					return dst;
-				};
-			}
-		}
-	}
-}])
-.directive('fixUrl', [function () {
-	return {
-		restrict: 'A',
-		require: 'ngModel',
-		link: function (scope, element, attr, ngModel) {
-			var urlRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.\-\?\=\&]*)$/i;
-
-			//Render formatters on blur...
-			var render = function () {
-				var viewValue = ngModel.$modelValue;
-				if (viewValue == null) return;
-				for (var i in ngModel.$formatters) {
-					viewValue = ngModel.$formatters[i](viewValue);
-				}
-				ngModel.$viewValue = viewValue;
-				ngModel.$render();
+			var inputAttrs = {
+				type:'text',
+				showWeeks: showWeeks,
+				datepickerPopup: datepickerPopup
 			};
-			element.bind('blur', render);
+			var fieldElements = $autofieldsProvider.field(directive, field, '<input/>', inputAttrs);
+			
+			return fieldElements.fieldContainer;
+		});
 
-			var formatUrl = function (value) {
-				var test = urlRegex.test(value);
-				if (test) {
-					var matches = value.match(urlRegex);
-					var reformatted = (matches[1] != null && matches[1] != '') ? matches[1] : 'http://';
-					reformatted += matches[2] + '.' + matches[3];
-					if (typeof matches[4] != "undefined") reformatted += matches[4]
-					value = reformatted;
-				}
-				return value;
+		// Static Field Handler
+		$autofieldsProvider.registerHandler('static', function(directive, field, index){
+			var showWeeks = field.showWeeks ? field.showWeeks : directive.options.dateSettings.showWeeks;
+			var datepickerPopup = field.datepickerPopup ? field.datepickerPopup : directive.options.dateSettings.datepickerPopup;
+
+			var fieldElements = $autofieldsProvider.field(directive, field, '<p/>');
+
+			//Remove Classes & Attributes
+			var input = angular.element('<p/>');
+			input.attr('ng-bind', fieldElements.input.attr('ng-model'));
+			input.addClass('form-control-static');
+			fieldElements.input.replaceWith(input);
+			
+			return fieldElements.fieldContainer;
+		});
+
+		// Multiple Per Row Handler
+		$autofieldsProvider.settings.classes.row = $autofieldsProvider.settings.classes.row || [];
+		$autofieldsProvider.settings.classes.row.push('row');
+		$autofieldsProvider.settings.classes.col = $autofieldsProvider.settings.classes.col || [];
+		$autofieldsProvider.settings.classes.col.push('col-sm-$size');
+		$autofieldsProvider.settings.classes.colOffset = $autofieldsProvider.settings.classes.colOffset || [];
+		$autofieldsProvider.settings.classes.colOffset.push('col-sm-offset-$size');
+		$autofieldsProvider.registerHandler('multiple', function(directive, field, index){
+			var row = angular.element('<div/>');
+			row.addClass(directive.options.classes.row.join(' '));
+
+			angular.forEach(field.fields, function(cell, cellIndex){
+				var cellContainer = angular.element('<div/>')
+				var cellSize = cell.type != 'multiple' ? cell.columns || field.columns : field.columns;
+				cellContainer.addClass(directive.options.classes.col.join(' ').replace(/\$size/g,cellSize));
+
+				cellContainer.append($autofieldsProvider.createField(directive, cell, cellIndex));
+
+				row.append(cellContainer);
+			})
+
+			return row;
+		});
+
+		// Register Help Block Support
+		$autofieldsProvider.settings.classes.helpBlock = $autofieldsProvider.settings.classes.helpBlock || [];
+		$autofieldsProvider.settings.classes.helpBlock.push('help-block');
+		$autofieldsProvider.registerMutator('helpBlock', function(directive, field, fieldElements){
+			if(!field.help) return fieldElements;
+			
+			fieldElements.helpBlock = angular.element('<p/>');
+			fieldElements.helpBlock.addClass(directive.options.classes.helpBlock.join(' '))
+			fieldElements.helpBlock.html(field.help);
+			fieldElements.fieldContainer.append(fieldElements.helpBlock);
+
+			return fieldElements;
+		});
+
+		// Register Horizontal Form Support
+		$autofieldsProvider.settings.layout = {
+			type: 'basic',
+			labelSize: 2,
+			inputSize: 10
+		};
+		$autofieldsProvider.registerMutator('horizontalForm', function(directive, field, fieldElements){
+			if(!(directive.options.layout && directive.options.layout.type == 'horizontal')){
+				directive.container.removeClass('form-horizontal');
+				return fieldElements;
 			}
-			ngModel.$formatters.push(formatUrl);
-			ngModel.$parsers.unshift(formatUrl);
-		}
-	};
-}])
-.directive('valueFunction', [function () {
-	return {
-		restrict: 'A',
-		require: 'ngModel',
-		link: function (scope, element, attr, ngModel) {
-			var valueFn = scope.$eval(attr.valueFunction);
 
-			scope.$watch(attr.valueFunction + '()', function (value) { //ToUser
-				if (value != null) {
-					scope.$eval(attr.ngModel + '=' + attr.valueFunction + '()');
-				}
-			});
+			// Classes & sizing
+			var col = $autofieldsProvider.settings.classes.col[0];
+			var colOffset = $autofieldsProvider.settings.classes.colOffset[0];
+			var labelSize = field.labelSize ? field.labelSize : directive.options.layout.labelSize;
+			var inputSize = field.inputSize ? field.inputSize : directive.options.layout.inputSize;
+			
+			//Add class to container
+			directive.container.addClass('form-horizontal');
 
-			var updateFunction = function (dontApply) {
-				valueFn(scope.$eval(attr.ngModel));
-				if (dontApply !== true) { scope.$apply(); }
-			};
+			// Add input container & sizing class
+			var inputContainer = angular.element('<div/>');
+			inputContainer.addClass(col.replace(/\$size/gi, inputSize));
+			
 
-			//Update on change
-			scope.$watch(attr.ngModel, function () {
-				if (updateFunction != null) { updateFunction(true); }
-			});
-		}
-	};
-}])
+			// Add label sizing class
+			if(fieldElements.label && field.type != 'checkbox'){
+				fieldElements.label.addClass(col.replace(/\$size/gi, labelSize));
+				fieldElements.label.after(inputContainer);
+			}else{
+				fieldElements.fieldContainer.prepend(inputContainer);
+				inputContainer.addClass(colOffset.replace(/\$size/g,labelSize));
+			}
+
+			// Add input container sizing class
+			if(field.type == 'checkbox'){
+				fieldElements.fieldContainer.removeClass('checkbox');
+				var checkboxContainer = angular.element('<div/>');
+				checkboxContainer.addClass('checkbox');
+				checkboxContainer.append(fieldElements.label);
+				inputContainer.append(checkboxContainer);
+			}else{
+				inputContainer.append(fieldElements.input);
+			}
+
+
+			// Move Help Block
+			if(field.help){
+				inputContainer.append(fieldElements.helpBlock);
+			}
+
+			return fieldElements;
+		}, {require:'helpBlock'});
+	}]);
+
+/**
+ * @ngdoc overview
+ * @name autofields.bootstrap.validation
+ * Uses autofields validation hooks to display
+ * validation popovers and highlight valid/invalid fields
+ */
+angular.module('autofields.bootstrap.validation',['autofields.validation'])
+	.config(['$autofieldsProvider', function($autofieldsProvider){
+		// Add Validation Attributes
+		$autofieldsProvider.settings.attributes.container.ngClass = "{'has-error':"+$autofieldsProvider.settings.validation.invalid+", 'has-success':"+$autofieldsProvider.settings.validation.valid+"}";
+		$autofieldsProvider.settings.attributes.input.popover = "{{("+$autofieldsProvider.settings.validation.valid+") ? '$validMsg' : ($errorMsgs)}}";
+
+		// Validation Mutator
+		$autofieldsProvider.registerMutator('bootstrap-validation', function(directive, field, fieldElements){
+			//Check to see if validation should be added
+			if(!fieldElements.validation){
+				//If not enabled, remove validation hooks
+				fieldElements.input.removeAttr('popover');
+				return fieldElements;
+			}
+
+			// Add validation attributes
+			if(fieldElements.msgs.length){
+				var popoverAttr = fieldElements.input.attr('popover')
+								  .replace(/\$validMsg/gi, fieldElements.validMsg)
+								  .replace(/\$errorMsgs/gi, fieldElements.msgs.join('+'));
+				fieldElements.input.attr({
+					'popover-trigger':'focus',
+					'popover-placement':'top',
+					'popover':popoverAttr
+				});
+			}else{
+				fieldElements.input.removeAttr('popover');
+			}
+
+			return fieldElements;
+		}, {require:'validation', override:true});
+	}]);
+
+angular.module('autofields',['autofields.bootstrap','autofields.bootstrap.validation']);
