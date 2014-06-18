@@ -1,6 +1,6 @@
 {
     "name": "angular-autoFields-bootstrap",
-    "version": "2.0.0",
+    "version": "2.1.1",
     "main": [
         "autofields.min.js",
         "autofields-bootstrap.min.js"

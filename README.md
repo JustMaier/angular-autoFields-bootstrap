@@ -72,6 +72,11 @@ angular.module('app',['autofields'])
 * `rows` number of textarea rows (defaults to 3)
 * `columns` number of sm columns a field should span if the type is multiple. If this is applied at the same level as the multiple type, it will apply it to all of it's fields.
 * `msgs` validation messages for corresponding validation properties on the field
+* `addon` array of addon objects to be included with the input
+	* `button` is a button (default: false)
+	* `icon` class string for an icon to include, empty or null implies no icon
+	* `content` string to be placed in the addon
+	* `before` prepend the addon (default: false)
 
 ##Options
 
@@ -90,13 +95,14 @@ angular.module('app',['autofields'])
 	* `defaultMsgs` default validation messages when none is specified in the field schema
 
 ####With Bootstrap
-* `classes` adds 4 new element class arrays: row, col, colOffset, helpBlock
+* `classes` adds 8 new element class arrays: row, col, colOffset, helpBlock, inputGroup, inputGroupAddon, inputGroupAddonButton, button
 * `layout` layout options for the fields
 	* `type` form type: `basic | horizontal`
 	* `labelSize` how many columns a label should span
 	* `inputSize` how many columns an input should span
 * `defaultOption` the text for the default select option (Select One)
 * `dateSettings` settings for the date fields ([see angular-ui-bootstrap's date picker](http://angular-ui.github.io/bootstrap/#/datepicker))
+* `datepickerOptions` settings for the date picker ([see angular-ui-bootstrap's date picker](http://angular-ui.github.io/bootstrap/#/datepicker))
 
 ##Extend
 AutoFields is now highly extensible allowing developer to easily add new field types and field properties.

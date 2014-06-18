@@ -16,7 +16,7 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 		$autofieldsProvider.settings.classes.container.push('form-group');
 		$autofieldsProvider.settings.classes.input.push('form-control');
 		$autofieldsProvider.settings.classes.label.push('control-label');
-		
+
 		// Override Checkbox Field Handler
 		$autofieldsProvider.registerHandler('checkbox', function(directive, field, index){
 			var fieldElements = $autofieldsProvider.field(directive, field, '<input/>');
@@ -32,6 +32,15 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 			showWeeks:false,
 			datepickerPopup: 'MMMM dd, yyyy'
 		};
+		$autofieldsProvider.settings.scope.datepickerOptions = {
+			showWeeks:false
+		};
+		$autofieldsProvider.settings.scope.openCalendar = function($scope, property, e){
+			e.preventDefault();
+			e.stopPropagation();
+
+			$scope[property] = !$scope[property];
+		};
 		$autofieldsProvider.registerHandler('date', function(directive, field, index){
 			var showWeeks = field.showWeeks ? field.showWeeks : directive.options.dateSettings.showWeeks;
 			var datepickerPopup = field.datepickerPopup ? field.datepickerPopup : directive.options.dateSettings.datepickerPopup;
@@ -39,10 +48,19 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 			var inputAttrs = {
 				type:'text',
 				showWeeks: showWeeks,
-				datepickerPopup: datepickerPopup
+				datepickerPopup: datepickerPopup,
+				datepickerOptions: 'datepickerOptions',
+				isOpen: '$property_cleanOpen'
 			};
+
+			field.addons = [{
+				button:true,
+				icon:'glyphicon glyphicon-calendar',
+				attr:{ngClick:'openCalendar("$property_cleanOpen",$event)'}
+			}];
+
 			var fieldElements = $autofieldsProvider.field(directive, field, '<input/>', inputAttrs);
-			
+
 			return fieldElements.fieldContainer;
 		});
 
@@ -99,6 +117,48 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 
 			return fieldElements;
 		});
+
+		// Register Addon Support
+		$autofieldsProvider.settings.classes.inputGroup = ['input-group'];
+		$autofieldsProvider.settings.classes.inputGroupAddon = ['input-group-addon'];
+		$autofieldsProvider.settings.classes.inputGroupAddonButton = ['input-group-btn'];
+		$autofieldsProvider.settings.classes.button = ['btn','btn-default'];
+		$autofieldsProvider.registerMutator('addons', function(directive, field, fieldElements){
+			if(!field.addons) return fieldElements;
+
+			fieldElements.inputGroup = angular.element('<div/>');
+			fieldElements.inputGroup.addClass($autofieldsProvider.settings.classes.inputGroup.join(' '));
+
+			var toAppend = [];
+			angular.forEach(field.addons, function(addon){
+				var inputGroupAddon = angular.element('<span/>'),
+					button = null;
+				inputGroupAddon.addClass($autofieldsProvider.settings.classes.inputGroupAddon.join(' '));
+
+				if(addon.button){
+					inputGroupAddon.attr('class',$autofieldsProvider.settings.classes.inputGroupAddonButton.join(' '));
+					button = angular.element('<button type="button"/>');
+					button.addClass($autofieldsProvider.settings.classes.button.join(' '));
+					inputGroupAddon.append(button);
+				}
+				if(addon.icon != null){
+					var icon = angular.element('<i/>');
+					icon.addClass(addon.icon);
+					(button||inputGroupAddon).append(icon);
+				}
+				if(addon.content != null) (button||inputGroupAddon).html(addon.content);
+				if(addon.attr) $autofieldsProvider.setAttributes(directive, field, (button||inputGroupAddon), addon.attr);
+
+				if(addon.before) fieldElements.inputGroup.append(inputGroupAddon);
+				else toAppend.push(inputGroupAddon);
+			})
+
+			fieldElements.inputGroup.append(fieldElements.input);
+			angular.forEach(toAppend, function(el){fieldElements.inputGroup.append(el)});
+
+			fieldElements.fieldContainer.append(fieldElements.inputGroup);
+			return fieldElements;
+		})
 
 		// Register Horizontal Form Support
 		$autofieldsProvider.settings.layout = {
@@ -168,10 +228,14 @@ angular.module('autofields.bootstrap.validation',['autofields.validation'])
 		$autofieldsProvider.settings.attributes.container.ngClass = "{'has-error':"+$autofieldsProvider.settings.validation.invalid+", 'has-success':"+$autofieldsProvider.settings.validation.valid+"}";
 		$autofieldsProvider.settings.attributes.input.popover = "{{("+$autofieldsProvider.settings.validation.valid+") ? '$validMsg' : ($errorMsgs)}}";
 
+		// Dont show popovers on these types
+		// this is to avoid multiple scope errors with UI Bootstrap
+		$autofieldsProvider.settings.noPopover = ['date'];
+
 		// Validation Mutator
 		$autofieldsProvider.registerMutator('bootstrap-validation', function(directive, field, fieldElements){
 			//Check to see if validation should be added
-			if(!fieldElements.validation){
+			if(!fieldElements.validation || $autofieldsProvider.settings.noPopover.indexOf(field.type) != -1){
 				//If not enabled, remove validation hooks
 				fieldElements.input.removeAttr('popover');
 				return fieldElements;

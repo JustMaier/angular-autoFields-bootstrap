@@ -41,26 +41,28 @@ angular.module('autofields.core', [])
 					'class': '$type'
 				},
 				input: {
-					id: '$property',
-					name: '$property',
+					id: '$property_clean',
+					name: '$property_clean',
 					type: '$type',
-					ngModel: '$data[\'$property\']',
+					ngModel: '$data.$property',
 					placeholder: '$placeholder'
 				},
 				label: {}
 			},
-			container: '<div class="autofields" ng-form name="$form"></div>'
+			container: '<div class="autofields" ng-form name="$form"></div>',
+			scope: {}
 		};
 
 		// Field Building Helpers
 		// Add Attributes to Element
-		var setAttributes = function(directive, field, el, attrs){
+		var setAttributes = autofields.setAttributes = function(directive, field, el, attrs){
 			angular.forEach(attrs, function(value, attr){
 				if(value && typeof value == 'string'){
 					value = value
 						.replace(/\$form/g, directive.formStr)
 						.replace(/\$schema/g, directive.schemaStr)
 						.replace(/\$type/g, field.type || 'text')
+						.replace(/\$property_clean/g, field.property.replace(/\[|\]|\./g, ''))
 						.replace(/\$property/g, field.property)
 						.replace(/\$data/g, directive.dataStr)
 						.replace(/\$placeholder/g, field.placeholder != null ? field.placeholder : helper.LabelText(field));
@@ -115,6 +117,21 @@ angular.module('autofields.core', [])
 			return fieldElements;
 		}
 
+		// Update scope with items attached in settings
+		autofields.updateScope = function(scope){
+			angular.forEach(autofields.settings.scope, function(value, property){
+				if(typeof value == 'function'){
+					scope[property] = function(){
+						var args = Array.prototype.slice.call(arguments, 0);
+						args.unshift(scope);
+						value.apply(this, args);
+					}
+				}else{
+					scope[property] = value;
+				}
+			})
+		}
+
 		// Handler Container
 		var handlers = {};
 
@@ -154,7 +171,8 @@ angular.module('autofields.core', [])
 		autofields.$get = function(){
 			return {
 				settings: autofields.settings,
-				createField: autofields.createField
+				createField: autofields.createField,
+				updateScope: autofields.updateScope
 			};
 		};
 
@@ -215,6 +233,7 @@ angular.module('autofields.core', [])
 						directive.formScope = $scope.$new();
 						directive.formScope.data = $scope[directive.dataStr];
 						directive.formScope.fields = schema;
+						$autofields.updateScope(directive.formScope);
 
 						// Compile Element with Scope
 						$compile(directive.container)(directive.formScope);
@@ -380,8 +399,8 @@ angular.module('autofields.validation', ['autofields.core'])
 				email: 'This is not a valid email address',
 				valid: 'This field is valid'
 			},
-			invalid: '$form.$property.$invalid && $form.$property.$dirty',
-			valid: '$form.$property.$valid'
+			invalid: '$form.$property_clean.$invalid && $form.$property_clean.$dirty',
+			valid: '$form.$property_clean.$valid'
 		};
 
 		// Add Validation Attributes
