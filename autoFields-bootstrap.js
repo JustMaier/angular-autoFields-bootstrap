@@ -203,7 +203,7 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 				checkboxContainer.append(fieldElements.label);
 				inputContainer.append(checkboxContainer);
 			}else{
-				inputContainer.append(fieldElements.input);
+				inputContainer.append(fieldElements.inputGroup || fieldElements.input);
 			}
 
 
