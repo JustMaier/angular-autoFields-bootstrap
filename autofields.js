@@ -191,7 +191,7 @@ angular.module('autofields.core', [])
 						optionsStr: $attr.options,
 						dataStr: $attr.data,
 						formStr: $attr.form || 'autofields',
-						classes: $attr.class,
+						classes: $attr['class'],
 						container: null,
 						formScope: null
 					};
@@ -250,8 +250,8 @@ angular.module('autofields.core', [])
 					$scope.$watch(directive.formStr, function (form) {
 						directive.container.attr('name',directive.formStr);
 					});
-					$scope.$watch(function(){return $attr.class;}, function (form) {
-						directive.classes = $attr.class;
+					$scope.$watch(function(){return $attr['class'];}, function (form) {
+						directive.classes = $attr['class'];
 						directive.container.attr('class', directive.classes);
 					});
 
