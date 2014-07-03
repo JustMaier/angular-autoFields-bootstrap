@@ -168,3 +168,4 @@ module('autofields.helpblock', ['autofields.core'])
 
 ##Notes
 * It shares the scope of it's parent so that it can access the data on the scope
+* To make it work on IE8, just add a [polyfill for Array.isArray()](https://developer.mozilla.org/fr/docs/JavaScript/Reference/Global_Objects/Array/isArray)
