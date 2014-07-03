@@ -11,7 +11,7 @@ Instead, just specify a schema for the form and the model you want to bind it to
 ##Installation
 
 ####Bower
-`bower install angular-autofields-bootstrap`
+`bower install angular-autoFields-bootstrap`
 
 ####Nuget
 `install-package AngularJs.AutoFields.Bootstrap`
