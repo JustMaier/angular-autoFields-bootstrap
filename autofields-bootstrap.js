@@ -1,5 +1,5 @@
 /**
- * @license Autofields v2.1.3
+ * @license Autofields v2.1.4
  * (c) 2014 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
  * License: MIT
  */
@@ -56,7 +56,7 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 			if (!(field.attr && field.attr.disabled == true)) {
 				field.addons = [{
 					button: true,
-					icon: 'icon-calendar',
+					icon: 'glyphicon glyphicon-calendar',
 					attr: { ngClick: 'openCalendar("$property_cleanOpen",$event)' }
 				}];
 			}
