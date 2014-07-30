@@ -346,9 +346,9 @@ angular.module('autofields.standard',['autofields.core'])
 				var render = function () {
 					var viewValue = ngModel.$modelValue;
 					if (viewValue == null) return;
-					for (var i = 0; i < ngModel.$formatters.length; i++) {
-						viewValue = ngModel.$formatters[i](viewValue);
-					}
+					angular.forEach(ngModel.$formatters, function (formatter) {
+						viewValue = formatter(viewValue);
+					})
 					ngModel.$viewValue = viewValue;
 					ngModel.$render();
 				};
