@@ -164,7 +164,7 @@ angular.module('autofields.core', [])
 			if(handler == null){
 				console.warn(field.type+' not supported - field ignored');
 				return;
-			} 
+			}
 			return handler(directive, field, index);
 		};
 
@@ -195,7 +195,7 @@ angular.module('autofields.core', [])
 						container: null,
 						formScope: null
 					};
-					
+
 					//Helper Functions
 					var helper = {
 						extendDeep: function(dst) {
@@ -206,8 +206,8 @@ angular.module('autofields.core', [])
 											helper.extendDeep(dst[key], value);
 										} else {
 											dst[key] = value;
-										}     
-									});   
+										}
+									});
 								}
 							});
 							return dst;
@@ -319,11 +319,11 @@ angular.module('autofields.standard',['autofields.core'])
 		$autofieldsProvider.settings.displayAttributes = ($autofieldsProvider.settings.displayAttributes || []).concat(['ng-if', 'ng-show', 'ng-hide']);
 		$autofieldsProvider.registerMutator('displayAttributes',function(directive, field, fieldElements){
 			if(!field.attr) return fieldElements;
-			
+
 			// Check for presence of each display attribute
 			angular.forEach($autofieldsProvider.settings.displayAttributes, function(attr){
 				var value = fieldElements.input.attr(attr);
-				
+
 				// Stop if field doesn't have attribute
 				if(!value) return;
 
@@ -346,7 +346,7 @@ angular.module('autofields.standard',['autofields.core'])
 				var render = function () {
 					var viewValue = ngModel.$modelValue;
 					if (viewValue == null) return;
-					for (var i in ngModel.$formatters) {
+					for (var i = 0; i < ngModel.$formatters.length; i++) {
 						viewValue = ngModel.$formatters[i](viewValue);
 					}
 					ngModel.$viewValue = viewValue;
@@ -432,7 +432,7 @@ angular.module('autofields.validation', ['autofields.core'])
 			});
 			// Get Valid Message
 			fieldElements.validMsg = (field.msgs && field.msgs.valid)? field.msgs.valid : directive.options.validation.defaultMsgs.valid;
-			
+
 			// Add validation attributes
 			if(fieldElements.msgs.length){
 				// Add message display with ng-show/ng-hide
