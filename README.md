@@ -69,9 +69,10 @@ angular.module('app',['autofields'])
 * `help` a block of help or description text to be displayed beneath the field
 * `attr` any additional attributes you would like to have on the object. Camelcase is converted to dash notation. Validation properties can go here.
 * `list` the string that goes into ng-options for select fields
-* `rows` number of textarea rows (defaults to 3)
+* `rows` number of textarea rows (default: 3)
 * `columns` number of sm columns a field should span if the type is multiple. If this is applied at the same level as the multiple type, it will apply it to all of it's fields.
 * `msgs` validation messages for corresponding validation properties on the field
+* `validate` enable/disable validation for the field (default: true)
 * `addons` array of addon objects to be included with the input
 	* `button` is a button (default: false)
 	* `icon` class string for an icon to include, empty or null implies no icon

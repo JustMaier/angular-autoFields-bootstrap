@@ -1,5 +1,5 @@
 /**
- * @license Autofields v2.1.4.1
+ * @license Autofields v2.1.4.2
  * (c) 2014 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
  * License: MIT
  */
@@ -409,7 +409,7 @@ angular.module('autofields.validation', ['autofields.core'])
 		// Add Validation Mutator
 		$autofieldsProvider.registerMutator('validation', function(directive, field, fieldElements){
 			//Check to see if validation should be added
-			fieldElements.validation = directive.options.validation.enabled && directive.options.validation.showMessages;
+			fieldElements.validation = directive.options.validation.enabled && directive.options.validation.showMessages && field.validate !== false;
 			if(!fieldElements.validation){
 				//If not enabled, remove validation hooks
 				fieldElements.fieldContainer.removeAttr('ng-class');
