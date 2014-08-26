@@ -1,5 +1,5 @@
 /**
- * @license Autofields v2.1.4
+ * @license Autofields v2.1.4.1
  * (c) 2014 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
  * License: MIT
  */
@@ -54,7 +54,7 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 			};
 
 			if (!(field.attr && field.attr.disabled == true)) {
-				field.addons = [{
+				field.$addons = [{
 					button: true,
 					icon: 'glyphicon glyphicon-calendar',
 					attr: { ngClick: 'openCalendar("$property_cleanOpen",$event)' }
@@ -126,13 +126,13 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 		$autofieldsProvider.settings.classes.inputGroupAddonButton = ['input-group-btn'];
 		$autofieldsProvider.settings.classes.button = ['btn','btn-default'];
 		$autofieldsProvider.registerMutator('addons', function(directive, field, fieldElements){
-			if(!field.addons) return fieldElements;
+			if(!(field.$addons || field.addons)) return fieldElements;
 
 			fieldElements.inputGroup = angular.element('<div/>');
 			fieldElements.inputGroup.addClass($autofieldsProvider.settings.classes.inputGroup.join(' '));
 
 			var toAppend = [];
-			angular.forEach(field.addons, function(addon){
+			angular.forEach(field.$addons || field.addons, function(addon){
 				var inputGroupAddon = angular.element('<span/>'),
 					button = null;
 				inputGroupAddon.addClass($autofieldsProvider.settings.classes.inputGroupAddon.join(' '));
