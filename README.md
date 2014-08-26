@@ -72,7 +72,7 @@ angular.module('app',['autofields'])
 * `rows` number of textarea rows (defaults to 3)
 * `columns` number of sm columns a field should span if the type is multiple. If this is applied at the same level as the multiple type, it will apply it to all of it's fields.
 * `msgs` validation messages for corresponding validation properties on the field
-* `addon` array of addon objects to be included with the input
+* `addons` array of addon objects to be included with the input
 	* `button` is a button (default: false)
 	* `icon` class string for an icon to include, empty or null implies no icon
 	* `content` string to be placed in the addon
