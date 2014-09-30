@@ -1,5 +1,5 @@
 /**
- * @license Autofields v2.1.4.2
+ * @license Autofields v2.1.6
  * (c) 2014 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
  * License: MIT
  */
@@ -397,7 +397,7 @@ angular.module('autofields.validation', ['autofields.core'])
 				min: 'This is under the minumum value',
 				max: 'This exceeds the maximum value',
 				email: 'This is not a valid email address',
-				valid: 'This field is valid'
+				valid: ''
 			},
 			invalid: '$form.$property_clean.$invalid && $form.$property_clean.$dirty',
 			valid: '$form.$property_clean.$valid'
@@ -409,7 +409,7 @@ angular.module('autofields.validation', ['autofields.core'])
 		// Add Validation Mutator
 		$autofieldsProvider.registerMutator('validation', function(directive, field, fieldElements){
 			//Check to see if validation should be added
-			fieldElements.validation = directive.options.validation.enabled && directive.options.validation.showMessages && field.validate !== false;
+			fieldElements.validation = directive.options.validation.enabled && field.validate !== false;
 			if(!fieldElements.validation){
 				//If not enabled, remove validation hooks
 				fieldElements.fieldContainer.removeAttr('ng-class');
@@ -418,6 +418,7 @@ angular.module('autofields.validation', ['autofields.core'])
 
 			// Get Error Messages
 			fieldElements.msgs = [];
+			if(!directive.options.validation.showMessages) return fieldElements;
 			angular.forEach(angular.extend({}, directive.options.validation.defaultMsgs, field.msgs), function(message, error){
 				if(
 					(field.msgs && field.msgs[error] != null) ||

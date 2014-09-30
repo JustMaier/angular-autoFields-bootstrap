@@ -1,5 +1,5 @@
 /**
- * @license Autofields v2.1.4.2
+ * @license Autofields v2.1.6
  * (c) 2014 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
  * License: MIT
  */
@@ -225,6 +225,13 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
  * validation popovers and highlight valid/invalid fields
  */
 angular.module('autofields.bootstrap.validation',['autofields.validation'])
+	.config(['$tooltipProvider', function($tooltipProvider){
+		$tooltipProvider.setTriggers({'keyup focus':'blur'});
+		$tooltipProvider.options({
+			placement:'top',
+			animation:false
+		});
+	}])
 	.config(['$autofieldsProvider', function($autofieldsProvider){
 		// Add Validation Attributes
 		$autofieldsProvider.settings.attributes.container.ngClass = "{'has-error':"+$autofieldsProvider.settings.validation.invalid+", 'has-success':"+$autofieldsProvider.settings.validation.valid+"}";
@@ -246,11 +253,10 @@ angular.module('autofields.bootstrap.validation',['autofields.validation'])
 			// Add validation attributes
 			if(fieldElements.msgs.length){
 				var popoverAttr = fieldElements.input.attr('popover')
-								  .replace(/\$validMsg/gi, fieldElements.validMsg)
-								  .replace(/\$errorMsgs/gi, fieldElements.msgs.join('+'));
+									.replace(/\$validMsg/gi, fieldElements.validMsg)
+									.replace(/\$errorMsgs/gi, fieldElements.msgs.join('+'));
 				fieldElements.input.attr({
-					'popover-trigger':'focus',
-					'popover-placement':'top',
+					'popover-trigger':'keyup focus',
 					'popover':popoverAttr
 				});
 			}else{
