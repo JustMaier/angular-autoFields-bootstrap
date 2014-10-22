@@ -18,9 +18,9 @@ Instead, just specify a schema for the form and the model you want to bind it to
 
 ####Manually
 ```html
-<script type="text/javascript" src="js/autofields-bootstrap.js"></script>`
-<!-- with bootstrap -->
 <script type="text/javascript" src="js/autofields.js"></script>
+<!-- with bootstrap -->
+<script type="text/javascript" src="js/autofields-bootstrap.js"></script>
 ```
 
 ##Usage
