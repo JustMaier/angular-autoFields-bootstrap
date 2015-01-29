@@ -428,7 +428,8 @@ angular.module('autofields.validation', ['autofields.core'])
 						field.attr['ng'+helper.CamelToTitle(error)] != null)
 					)
 				){
-					fieldElements.msgs.push('('+directive.formStr+'.'+field.property+'.$error.'+error+'? \''+message+'\' : \'\')');
+					var $property_clean  = field.property.replace(/\[|\]|\./g, '');
+          				fieldElements.msgs.push('('+directive.formStr+'.'+$property_clean+'.$error.'+error+'? \''+message+'\' : \'\')');
 				}
 			});
 			// Get Valid Message
