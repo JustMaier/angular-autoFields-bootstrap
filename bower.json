@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "angular": "*",
-        "angular-ui-bootstrap": "*"
+        "angular-bootstrap": "*"
     },
     "devDependencies": {}
 }
