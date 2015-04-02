@@ -1,5 +1,5 @@
 /**
- * @license Autofields v2.1.6
+ * @license Autofields v2.1.8
  * (c) 2014 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
  * License: MIT
  */
@@ -75,7 +75,7 @@ angular.module('autofields.core', [])
 			var fieldContainer = angular.element('<div/>');
 			attrs = angular.extend({}, autofields.settings.attributes.container, attrs);
 			setAttributes(directive, field, fieldContainer, attrs);
-			fieldContainer.addClass(autofields.settings.classes.container.join(' '));
+			fieldContainer.addClass((directive.options||autofields.settings).classes.container.join(' '));
 
 			return fieldContainer;
 		};
@@ -84,7 +84,7 @@ angular.module('autofields.core', [])
 			var label = angular.element('<label/>');
 			attrs = angular.extend({}, autofields.settings.attributes.label, attrs);
 			setAttributes(directive, field, label, attrs);
-			label.addClass(autofields.settings.classes.label.join(' '));
+			label.addClass((directive.options||autofields.settings).classes.label.join(' '));
 			label.html(helper.LabelText(field));
 
 			return label;
@@ -94,7 +94,7 @@ angular.module('autofields.core', [])
 			var input = angular.element(html);
 			attrs = angular.extend({}, autofields.settings.attributes.input, attrs, field.attr);
 			setAttributes(directive, field, input, attrs);
-			input.addClass(autofields.settings.classes.input.join(' '));
+			input.addClass((directive.options||autofields.settings).classes.input.join(' '));
 
 			return input;
 		}
