@@ -225,7 +225,7 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
  * validation popovers and highlight valid/invalid fields
  */
 angular.module('autofields.bootstrap.validation',['autofields.validation'])
-	.config(['$tooltipProvider', function($tooltipProvider){
+	.config(['$uibTooltipProvider', function($tooltipProvider){
 		$tooltipProvider.setTriggers({'keyup focus':'blur'});
 		$tooltipProvider.options({
 			placement:'top',
