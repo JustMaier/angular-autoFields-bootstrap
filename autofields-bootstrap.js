@@ -48,8 +48,8 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 			var inputAttrs = {
 				type:'text',
 				showWeeks: showWeeks,
-				datepickerPopup: datepickerPopup,
-				datepickerOptions: 'datepickerOptions',
+				uibDatepickerPopup: datepickerPopup,
+				uibDatepickerOptions: 'datepickerOptions',
 				isOpen: '$property_cleanOpen'
 			};
 
@@ -225,9 +225,9 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
  * validation popovers and highlight valid/invalid fields
  */
 angular.module('autofields.bootstrap.validation',['autofields.validation'])
-	.config(['$tooltipProvider', function($tooltipProvider){
-		$tooltipProvider.setTriggers({'keyup focus':'blur'});
-		$tooltipProvider.options({
+	.config(['$uibTooltipProvider', function($uibTooltipProvider){
+		$uibTooltipProvider.setTriggers({'keyup focus':'blur'});
+		$uibTooltipProvider.options({
 			placement:'top',
 			animation:false
 		});
@@ -246,21 +246,21 @@ angular.module('autofields.bootstrap.validation',['autofields.validation'])
 			//Check to see if validation should be added
 			if(!fieldElements.validation || $autofieldsProvider.settings.noPopover.indexOf(field.type) != -1){
 				//If not enabled, remove validation hooks
-				fieldElements.input.removeAttr('popover');
+				fieldElements.input.removeAttr('uib-popover');
 				return fieldElements;
 			}
 
 			// Add validation attributes
 			if(fieldElements.msgs.length){
-				var popoverAttr = fieldElements.input.attr('popover')
+				var popoverAttr = fieldElements.input.attr('uib-popover')
 									.replace(/\$validMsg/gi, fieldElements.validMsg)
 									.replace(/\$errorMsgs/gi, fieldElements.msgs.join('+'));
 				fieldElements.input.attr({
-					'popover-trigger':'keyup focus',
-					'popover':popoverAttr
+					'uib-popover-trigger':'keyup focus',
+					'uib-popover':popoverAttr
 				});
 			}else{
-				fieldElements.input.removeAttr('popover');
+				fieldElements.input.removeAttr('uib-popover');
 			}
 
 			return fieldElements;
