@@ -1,6 +1,6 @@
 /**
- * @license Autofields v2.2.0
- * (c) 2014 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
+ * @license Autofields v2.2.1
+ * (c) 2016 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
  * License: MIT
  */
 'use strict';
@@ -235,7 +235,7 @@ angular.module('autofields.bootstrap.validation',['autofields.validation'])
 	.config(['$autofieldsProvider', function($autofieldsProvider){
 		// Add Validation Attributes
 		$autofieldsProvider.settings.attributes.container.ngClass = "{'has-error':"+$autofieldsProvider.settings.validation.invalid+", 'has-success':"+$autofieldsProvider.settings.validation.valid+"}";
-		$autofieldsProvider.settings.attributes.input.popover = "{{("+$autofieldsProvider.settings.validation.valid+") ? '$validMsg' : ($errorMsgs)}}";
+		$autofieldsProvider.settings.attributes.input.uibPopover = "{{("+$autofieldsProvider.settings.validation.valid+") ? '$validMsg' : ($errorMsgs)}}";
 
 		// Dont show popovers on these types
 		// this is to avoid multiple scope errors with UI Bootstrap

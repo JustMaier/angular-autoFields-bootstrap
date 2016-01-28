@@ -1,3 +1,9 @@
+## 2.2.1
+
+Bugfixes:
+
+ - missing `uib` prefix on `popover` at `autofields-bootstrap.js` line 238 
+
 ## 2.2.0
 
 Breaking Changes:
