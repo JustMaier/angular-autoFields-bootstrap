@@ -1,5 +1,8 @@
 angular-autofields-bootstrap
 =============================
+[![Bower version][bower-image]]
+[![Nuget version][nuget-image]][nuget-url]
+[![NPM version][npm-image]][npm-url]
 
 Avoid bloating your templates with repetitive form html.  
 Instead, just specify a schema for the form and the model you want to bind it to and you're done!
@@ -170,3 +173,9 @@ module('autofields.helpblock', ['autofields.core'])
 ##Notes
 * It shares the scope of it's parent so that it can access the data on the scope
 * To make it work on IE8, just add a [polyfill for Array.isArray()](https://developer.mozilla.org/fr/docs/JavaScript/Reference/Global_Objects/Array/isArray)
+
+[npm-image]: https://img.shields.io/npm/v/angular-autoFields-bootstrap.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/angular-autoFields-bootstrap
+[bower-image]: https://img.shields.io/bower/v/angular-autoFields-bootstrap.svg?style=flat-square
+[nuget-image]: https://img.shields.io/nuget/v/angular-autoFields-bootstrap.svg?style=flat-square
+[nuget-url]: https://www.nuget.org/packages/AngularJs.AutoFields.Bootstrap/
