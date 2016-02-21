@@ -1,6 +1,6 @@
 angular-autofields-bootstrap
 =============================
-[![Bower version][bower-image]]
+![Bower version][bower-image]
 [![Nuget version][nuget-image]][nuget-url]
 [![NPM version][npm-image]][npm-url]
 
