@@ -1,8 +1,14 @@
+## 2.2.2
+
+Bugfixes:
+
+ - Remove `uib` prefix from `datepickerOptions` and remove `uib-showWeeks`.
+
 ## 2.2.1
 
 Bugfixes:
 
- - missing `uib` prefix on `popover` at `autofields-bootstrap.js` line 238 
+ - Missing `uib` prefix on `popover` at `autofields-bootstrap.js` line 238 
 
 ## 2.2.0
 

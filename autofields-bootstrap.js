@@ -1,5 +1,5 @@
 /**
- * @license Autofields v2.2.1
+ * @license Autofields v2.2.2
  * (c) 2016 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
  * License: MIT
  */
@@ -29,7 +29,6 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 
 		// Date Handler with Bootstrap Popover
 		$autofieldsProvider.settings.dateSettings = {
-			showWeeks:false,
 			datepickerPopup: 'MMMM dd, yyyy'
 		};
 		$autofieldsProvider.settings.scope.datepickerOptions = {
@@ -42,14 +41,12 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 			$scope[property] = !$scope[property];
 		};
 		$autofieldsProvider.registerHandler('date', function(directive, field, index){
-			var showWeeks = field.showWeeks ? field.showWeeks : directive.options.dateSettings.showWeeks;
 			var datepickerPopup = field.datepickerPopup ? field.datepickerPopup : directive.options.dateSettings.datepickerPopup;
 
 			var inputAttrs = {
 				type:'text',
-				showWeeks: showWeeks,
 				uibDatepickerPopup: datepickerPopup,
-				uibDatepickerOptions: 'datepickerOptions',
+				datepickerOptions: 'datepickerOptions',
 				isOpen: '$property_cleanOpen'
 			};
 
