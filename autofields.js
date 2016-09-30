@@ -73,7 +73,7 @@ angular.module('autofields.core', [])
 		// Standard Container for field
 		var getFieldContainer = function(directive, field, attrs){
 			var fieldContainer = angular.element('<div/>');
-			attrs = angular.extend({}, autofields.settings.attributes.container, attrs);
+			attrs = angular.extend({}, autofields.settings.attributes.container, directive.options.attributes.container, attrs);
 			setAttributes(directive, field, fieldContainer, attrs);
 			fieldContainer.addClass((directive.options||autofields.settings).classes.container.join(' '));
 
@@ -82,7 +82,7 @@ angular.module('autofields.core', [])
 		// Standard Label for field
 		var getLabel = function(directive, field, attrs){
 			var label = angular.element('<label/>');
-			attrs = angular.extend({}, autofields.settings.attributes.label, attrs);
+			attrs = angular.extend({}, autofields.settings.attributes.label, directive.options.attributes.label, attrs);
 			setAttributes(directive, field, label, attrs);
 			label.addClass((directive.options||autofields.settings).classes.label.join(' '));
 			label.html(helper.LabelText(field));
@@ -92,7 +92,7 @@ angular.module('autofields.core', [])
 		// Standard Input for field
 		var getInput = function(directive, field, html, attrs){
 			var input = angular.element(html);
-			attrs = angular.extend({}, autofields.settings.attributes.input, attrs, field.attr);
+			attrs = angular.extend({}, autofields.settings.attributes.input, directive.options.attributes.input, attrs, field.attr);
 			setAttributes(directive, field, input, attrs);
 			input.addClass((directive.options||autofields.settings).classes.input.join(' '));
 
