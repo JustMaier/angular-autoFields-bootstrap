@@ -1,3 +1,9 @@
+## 2.2.3
+
+Bugfixes:
+
+ - Fixed specifying attribute values from directive options #53
+
 ## 2.2.2
 
 Bugfixes:
