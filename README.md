@@ -175,5 +175,5 @@ module('autofields.helpblock', ['autofields.core'])
 [npm-image]: https://img.shields.io/npm/v/angular-autoFields-bootstrap.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/angular-autoFields-bootstrap
 [bower-image]: https://img.shields.io/bower/v/angular-autoFields-bootstrap.svg?style=flat-square
-[nuget-image]: https://img.shields.io/nuget/v/angular-autoFields-bootstrap.svg?style=flat-square
+[nuget-image]: https://img.shields.io/nuget/v/AngularJs.AutoFields.Bootstrap.svg?style=flat-square
 [nuget-url]: https://www.nuget.org/packages/AngularJs.AutoFields.Bootstrap/
