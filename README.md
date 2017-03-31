@@ -9,28 +9,28 @@ Instead, just specify a schema for the form and the model you want to bind it to
 
 [**Check out a demo & documentation**](http://justmaier.github.io/angular-autoFields-bootstrap/#demo)
 
-##Installation
+## Installation
 
-####Bower
+#### Bower
 `bower install angular-autoFields-bootstrap`
 
-####Nuget
+#### Nuget
 `install-package AngularJs.AutoFields.Bootstrap`
 
-####Manually
+#### Manually
 ```html
 <script type="text/javascript" src="js/autofields.js"></script>
 <!-- with bootstrap -->
 <script type="text/javascript" src="js/autofields-bootstrap.js"></script>
 ```
 
-##Usage
+## Usage
 
 0. If you're doing this manually and using bootstrap, be sure to install [Angular-UI Bootstrap](https://github.com/angular-ui/bootstrap) for date popover support
 1. Include the `autofields.js` script provided by this component into your app. If you are using bootstrap, also include `autofields-bootstrap.js`
 2. add `autofields` as a module dependency to your app
 
-####Javascript
+#### Javascript
 ```javascript
 angular.module('app',['autofields'])
 .controller('JoinCtrl', ['$scope', function ($scope) {
@@ -53,7 +53,7 @@ angular.module('app',['autofields'])
 }]);
 ```
 
-####Html
+#### Html
 ```html
  <form name="joinForm" ng-submit="join()">
     <auto:fields fields="schema" data="user"></auto:fields>
@@ -61,7 +61,7 @@ angular.module('app',['autofields'])
 </form>
 ```
 
-##Field Schema
+## Field Schema
 
 * `property` the data property to bind to
 * `type` the type of field. Options include: checkbox, date, select, textarea, any text variation (ie. password, text, email, number)
@@ -80,9 +80,9 @@ angular.module('app',['autofields'])
 	* `content` string to be placed in the addon
 	* `before` prepend the addon (default: false)
 
-##Options
+## Options
 
-####Standard
+#### Standard
 * `classes` object with an array of classes for each element of a field group: container, input, label
 * `attributes` object with default attribute-value pairs for each element of a field group: container, input, label
 * `displayAttributes` array of attributes that affect field display
@@ -90,7 +90,7 @@ angular.module('app',['autofields'])
 * `textareaRows` the default amount of rows for a textarea (3)
 * `fixUrl` whether or not url type fields should have http:// auto added (true)
 
-####With Validation
+#### With Validation
 * `validation` settings for validation
 	* `enabled` enabled/disable validation (enabled by default)
 	* `showMessages` enabled/disable validation messages (enabled by default)
@@ -106,11 +106,11 @@ angular.module('app',['autofields'])
 * `dateSettings` settings for the date fields ([see angular-ui-bootstrap's date picker](http://angular-ui.github.io/bootstrap/#/datepicker))
 * `datepickerOptions` settings for the date picker ([see angular-ui-bootstrap's date picker](http://angular-ui.github.io/bootstrap/#/datepicker))
 
-##Extend
+## Extend
 AutoFields is now highly extensible allowing developer to easily add new field types and field properties.
 
-###Adding New Field Types
-####`$autofieldsProvider.registerHandler(types, handler)`
+### Adding New Field Types
+#### `$autofieldsProvider.registerHandler(types, handler)`
 * `types` a string or array of strings with field types that will be used to map to the handler
 * `handler` a function that will be called by AutoFields to create the fields html. AutoFields will pass directive, field, and field index
 * `directive` directive properties, options, and elements:
@@ -119,7 +119,7 @@ AutoFields is now highly extensible allowing developer to easily add new field t
 * `field` the field schema currently being processed
 * `index` the index of the field in the field schema array
 
-####Example
+#### Example
 ```javascript
 module('autofields.checkbox', ['autofields.core'])
 .config(['$autofieldsProvider', function($autofieldsProvider){
@@ -134,8 +134,8 @@ module('autofields.checkbox', ['autofields.core'])
 }]);
 ```
 
-###Adding New Field Properties
-####`$autofieldsProvider.registerMutator(key, mutator, options)`
+### Adding New Field Properties
+#### `$autofieldsProvider.registerMutator(key, mutator, options)`
 * `key` something the mutator can be referenced by in require & override requests
 * `mutator` called by autofields after the creation of a field element
 	* `directive`
@@ -150,7 +150,7 @@ module('autofields.checkbox', ['autofields.core'])
 		* `msgs` an array of possible error messages *requires validation*
 		* `validMsg` a field's valid message *requires validation*
 
-####Example
+#### Example
 ```javascript
 module('autofields.helpblock', ['autofields.core'])
 .config(['$autofieldsProvider', function($autofieldsProvider){
@@ -168,7 +168,7 @@ module('autofields.helpblock', ['autofields.core'])
 }]);
 ```
 
-##Notes
+## Notes
 * It shares the scope of it's parent so that it can access the data on the scope
 * To make it work on IE8, just add a [polyfill for Array.isArray()](https://developer.mozilla.org/fr/docs/JavaScript/Reference/Global_Objects/Array/isArray)
 
