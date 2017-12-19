@@ -42,11 +42,11 @@ angular.module('autofields.bootstrap', ['autofields.standard','ui.bootstrap'])
 		};
 		$autofieldsProvider.registerHandler('date', function(directive, field, index){
 			var datepickerPopup = field.datepickerPopup ? field.datepickerPopup : directive.options.dateSettings.datepickerPopup;
-
+			var datepickerOptions = directive.options.datepickerOptions || 'datepickerOptions';
 			var inputAttrs = {
 				type:'text',
 				uibDatepickerPopup: datepickerPopup,
-				datepickerOptions: 'datepickerOptions',
+				datepickerOptions: datepickerOptions,
 				isOpen: '$property_cleanOpen'
 			};
 
