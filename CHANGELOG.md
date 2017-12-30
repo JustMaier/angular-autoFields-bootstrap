@@ -1,3 +1,9 @@
+## 2.2.4
+
+Bugfixes:
+
+ - Enabled datePickerOptions pass-through #62 Thanks @jasonvooo
+
 ## 2.2.3
 
 Bugfixes:

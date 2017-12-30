@@ -1,6 +1,5 @@
 angular-autofields-bootstrap
 =============================
-![Bower version][bower-image]
 [![Nuget version][nuget-image]][nuget-url]
 [![NPM version][npm-image]][npm-url]
 
@@ -10,9 +9,6 @@ Instead, just specify a schema for the form and the model you want to bind it to
 [**Check out a demo & documentation**](http://justmaier.github.io/angular-autoFields-bootstrap/#demo)
 
 ## Installation
-
-#### Bower
-`bower install angular-autoFields-bootstrap`
 
 #### Nuget
 `install-package AngularJs.AutoFields.Bootstrap`
@@ -174,6 +170,5 @@ module('autofields.helpblock', ['autofields.core'])
 
 [npm-image]: https://img.shields.io/npm/v/angular-autoFields-bootstrap.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/angular-autoFields-bootstrap
-[bower-image]: https://img.shields.io/bower/v/angular-autoFields-bootstrap.svg?style=flat-square
 [nuget-image]: https://img.shields.io/nuget/v/AngularJs.AutoFields.Bootstrap.svg?style=flat-square
 [nuget-url]: https://www.nuget.org/packages/AngularJs.AutoFields.Bootstrap/
