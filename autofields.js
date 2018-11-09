@@ -29,6 +29,9 @@ angular.module('autofields.core', [])
 			}
 		};
 
+		// Expose the helper in case consuming code needs these functions
+		autofields.helpers = helper;
+
 		// Directive-wide Handler Default Settings
 		autofields.settings = {
 			classes: {
@@ -55,7 +58,7 @@ angular.module('autofields.core', [])
 
 		// Field Building Helpers
 		// Add Attributes to Element
-		var setAttributes = autofields.setAttributes = function(directive, field, el, attrs){
+		autofields.setAttributes = function(directive, field, el, attrs){
 			angular.forEach(attrs, function(value, attr){
 				if(value && typeof value == 'string'){
 					value = value
@@ -74,7 +77,7 @@ angular.module('autofields.core', [])
 		var getFieldContainer = function(directive, field, attrs){
 			var fieldContainer = angular.element('<div/>');
 			attrs = angular.extend({}, autofields.settings.attributes.container, directive.options.attributes.container, attrs);
-			setAttributes(directive, field, fieldContainer, attrs);
+			autofields.setAttributes(directive, field, fieldContainer, attrs);
 			fieldContainer.addClass((directive.options||autofields.settings).classes.container.join(' '));
 
 			return fieldContainer;
@@ -83,7 +86,7 @@ angular.module('autofields.core', [])
 		var getLabel = function(directive, field, attrs){
 			var label = angular.element('<label/>');
 			attrs = angular.extend({}, autofields.settings.attributes.label, directive.options.attributes.label, attrs);
-			setAttributes(directive, field, label, attrs);
+			autofields.setAttributes(directive, field, label, attrs);
 			label.addClass((directive.options||autofields.settings).classes.label.join(' '));
 			label.html(helper.LabelText(field));
 
@@ -93,7 +96,7 @@ angular.module('autofields.core', [])
 		var getInput = function(directive, field, html, attrs){
 			var input = angular.element(html);
 			attrs = angular.extend({}, autofields.settings.attributes.input, directive.options.attributes.input, attrs, field.attr);
-			setAttributes(directive, field, input, attrs);
+			autofields.setAttributes(directive, field, input, attrs);
 			input.addClass((directive.options||autofields.settings).classes.input.join(' '));
 
 			return input;
