@@ -1,5 +1,5 @@
 /**
- * @license Autofields v2.2.4
+ * @license Autofields v2.2.5
  * (c) 2018 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
  * License: MIT
  */
