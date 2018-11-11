@@ -1,3 +1,10 @@
+## 2.2.5
+
+Fix/Improvement: 
+
+ - Fixed exposed setAttribute method so that it can be overridden. Thanks @flakey-bit #63
+ - Expose helper methods (CamelToTitle, CamelToDash, LabelText) Thanks @flakey-bit #63
+
 ## 2.2.4
 
 Bugfixes:
