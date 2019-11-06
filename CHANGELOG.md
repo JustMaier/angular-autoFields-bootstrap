@@ -1,3 +1,10 @@
+## 2.2.6
+
+Fix/Improvement:
+
+ - Improved ngModel property definition
+
+
 ## 2.2.5
 
 Fix/Improvement: 
