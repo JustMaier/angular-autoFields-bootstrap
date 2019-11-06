@@ -47,7 +47,7 @@ angular.module('autofields.core', [])
 					id: '$property_clean',
 					name: '$property_clean',
 					type: '$type',
-					ngModel: '$data.$property',
+					ngModel: '$data[\'$property\']',
 					placeholder: '$placeholder'
 				},
 				label: {}
