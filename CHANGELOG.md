@@ -1,3 +1,9 @@
+## 2.2.7
+
+Fix:
+
+ - Added bower.json to support older grunt builds fixes #66
+
 ## 2.2.6
 
 Fix/Improvement:
