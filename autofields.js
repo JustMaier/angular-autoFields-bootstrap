@@ -1,6 +1,6 @@
 /**
- * @license Autofields v2.2.5
- * (c) 2018 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
+ * @license Autofields v2.2.8
+ * (c) 2021 Justin Maier http://justmaier.github.io/angular-autoFields-bootstrap
  * License: MIT
  */
 'use strict';
@@ -59,6 +59,10 @@ angular.module('autofields.core', [])
 		// Field Building Helpers
 		// Add Attributes to Element
 		autofields.setAttributes = function(directive, field, el, attrs){
+			// Handle properties with a dot
+			if (field.property.indexOf('.') != -1 && attrs.ngModel == '$data[\'$property\']')
+				attrs.ngModel = '$data.$property';
+
 			angular.forEach(attrs, function(value, attr){
 				if(value && typeof value == 'string'){
 					value = value

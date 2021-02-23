@@ -1,3 +1,9 @@
+## 2.2.8
+
+Fix:
+
+ - Fields with a `.` in the `property` were no longer working as expected. This has been fixed.
+
 ## 2.2.7
 
 Fix:
